@@ -2,7 +2,7 @@ package com.victor.jbank.services;
 
 import com.victor.jbank.controllers.dto.CreateWalletDTO;
 import com.victor.jbank.entity.Wallet;
-import com.victor.jbank.exception.WalletDataAlreadyExists;
+import com.victor.jbank.exception.WalletDataAlreadyExistsException;
 import com.victor.jbank.repositories.WalletRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class WalletService {
 
     public Wallet createWallet(CreateWalletDTO dto) {
         if (walletRepository.findByCpfOrEmail(dto.cpf(), dto.email()).isPresent()) {
-            throw new WalletDataAlreadyExists("Cpf or email already exists");
+            throw new WalletDataAlreadyExistsException("Cpf or email already exists");
         }
 
         Wallet wallet = new Wallet();
