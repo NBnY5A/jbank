@@ -1,7 +1,9 @@
 package com.victor.jbank.controllers;
 
 import com.victor.jbank.controllers.dto.CreateWalletDTO;
+import com.victor.jbank.controllers.dto.DepositDTO;
 import com.victor.jbank.services.WalletService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +33,15 @@ public class WalletController {
         return (isDeleted)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{walletId}/deposit")
+    public ResponseEntity<Void> depositBalance(
+            @PathVariable(name = "walletId") UUID walletId,
+            @RequestBody @Valid DepositDTO depositDTO,
+            HttpServletRequest request
+    ) {
+        walletService.deposit(walletId, depositDTO, request.getAttribute("x-user-ip").toString());
+        return ResponseEntity.ok().build();
     }
 }
